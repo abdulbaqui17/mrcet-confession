@@ -1,6 +1,5 @@
 // components/DisplayPosts.tsx
 
-import React from 'react';
 import { Post } from "@/app/page"
 
 

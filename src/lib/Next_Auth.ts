@@ -1,9 +1,7 @@
 import prisma from "@/db";
 import GoogleProvider from "next-auth/providers/google";
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
 
 export const Next_Auth = {
-    adapter: PrismaAdapter(prisma),
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID || "",
@@ -24,22 +22,22 @@ export const Next_Auth = {
                         data: { email: profile.email }
                     });
                 }
-
-                return true;
+                
+                return true; 
             } catch (e) {
-
-                return false;
+                console.log("Error in signIn callback:", e);
+                return false; 
             }
         },
-        async jwt({ token, profile }: any) {
+        async jwt({ token, profile}: any) {
 
             if (profile) {
                 const user = await prisma.user.findUnique({
-                    where: { email: profile.email },
+                  where: { email: profile.email },
                 });
                 if (user) {
                     token.id = user.id;
-                }
+                  }
             }
             return token
         },

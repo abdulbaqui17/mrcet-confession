@@ -1,18 +1,18 @@
-// pages/index.tsx
+// app/page.tsx
 
-import React from 'react';
 import CreatePost from '@/components/CreatePost';
 import DisplayPosts from '@/components/DisplayPosts';
 import { getPosts } from '@/server/actions';
 
 export interface Post {
-  id: number; // Add this line
+  id: number;
   userId: number;
   title: string;
   image?: string | null;
   createdAt: string;
 }
 
+// Since it's a server component, we can directly use async here
 const HomePage = async () => {
   const postsFromDB = await getPosts();
   const posts: Post[] = postsFromDB.map((post) => ({
