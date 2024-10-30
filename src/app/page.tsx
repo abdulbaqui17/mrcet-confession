@@ -13,6 +13,7 @@ export interface Post {
 }
 
 // Since it's a server component, we can directly use async here
+export const dynamic = 'force-dynamic';
 const HomePage = async () => {
   const postsFromDB = await getPosts();
   const posts: Post[] = postsFromDB.map((post) => ({

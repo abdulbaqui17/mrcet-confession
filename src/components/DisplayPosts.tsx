@@ -1,5 +1,5 @@
 // components/DisplayPosts.tsx
-
+export const dynamic = 'force-dynamic';
 import { Post } from "@/app/page"
 
 
