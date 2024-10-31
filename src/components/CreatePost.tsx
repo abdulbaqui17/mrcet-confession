@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaUpload } from 'react-icons/fa'; // Importing an upload icon from react-icons
 import { useSession, signOut } from "next-auth/react"; // Importing useSession and signOut
+import toast from 'react-hot-toast';
 
 export default function CreatePost() {
     const { data: session } = useSession(); // Get the current session
@@ -15,9 +16,16 @@ export default function CreatePost() {
 
     const handlePostSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if(title.trim().length<3){
+            toast.error("Title must be 3 char long")
+            return;
+        }
+
         const res = await publisPost(title, mediaList);
         if (res) {
             router.push("/");
+            toast.success("post published successfully")
         }
         setTitle(""); // Clear title after submission
         setMediaList(""); // Clear media after submission
