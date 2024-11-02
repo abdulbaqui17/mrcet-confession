@@ -1,7 +1,8 @@
 // components/DisplayPosts.tsx
-export const dynamic = 'force-dynamic';
-import { Post } from "@/app/page"
 
+export const dynamic = 'force-dynamic';
+import { Post } from "@/app/page";
+import LikeButton from "./LikeButton";
 
 interface DisplayPostsProps {
     posts: Post[];
@@ -15,7 +16,9 @@ const DisplayPosts: React.FC<DisplayPostsProps> = ({ posts }) => {
                 {posts.map((post) => (
                     <li key={post.id} className="p-4 border rounded-lg bg-gray-800">
                         <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 rounded-full flex justify-center font-bold text-2xl bg-black pt-1" >{post.userId}</div>
+                            <div className="w-10 h-10 rounded-full flex justify-center font-bold text-2xl bg-black pt-1">
+                                {post.userId}
+                            </div>
                             <div className="font-medium dark:text-white">
                                 <div className='text-2xl'>Anonymous</div>
                                 <div className="text-sm text-gray-500 dark:text-gray-400"></div>
@@ -27,6 +30,25 @@ const DisplayPosts: React.FC<DisplayPostsProps> = ({ posts }) => {
                             <p className="text-gray-400 mt-1">
                                 Posted on {new Date(post.createdAt).toLocaleDateString()}
                             </p>
+                        </div>
+                        {/* Display Likes and Comments */}
+                        <div className="mt-4">
+                            {/* Likes */}
+                            <LikeButton
+                                likesCount={post.likes.length}
+                                postId={post.id} // Pass postId to LikeButton
+                            />
+                            {/* Comments */}
+                            <div className="mt-2">
+                                {/* <h4 className="text-gray-300 font-semibold">Comments:</h4> */}
+                                <ul className="space-y-2 mt-2">
+                                    {post.comments.map((comment, index) => (
+                                        <li key={index} className="text-gray-400">
+                                            - {comment.text}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                         </div>
                     </li>
                 ))}

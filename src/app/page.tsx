@@ -10,6 +10,8 @@ export interface Post {
   title: string;
   image?: string | null;
   createdAt: string;
+  likes:{id:number}[];
+  comments:{text:string}[]
 }
 
 // Since it's a server component, we can directly use async here
@@ -22,6 +24,8 @@ const HomePage = async () => {
     title: post.title,
     image: post.image,
     createdAt: post.createdAt.toString(),
+    likes: post.likes.map((like) => ({ id: like.id })),  // Map likes array properly
+    comments: post.comments.map((comment) => ({ text: comment.text })) // Map comments array properly
   }));
 
   return (
