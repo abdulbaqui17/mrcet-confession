@@ -36,7 +36,26 @@ export async function likePost(postId: number) {
                 postId: postId,
             },
         });
-        return like; 
+        return like;
+    } catch (error) {
+        console.error("Error liking the post:", error);
+        return null;
+    }
+}
+export async function commentPost(text: string, postId: number) {
+    const session = await getServerSession(Next_Auth);
+    if (!session || !session.user) {
+        console.error("User is not authenticated.");
+        return null;
+    }
+    try {
+        const comment = await prisma.comment.create({
+            data: {
+                text: text,
+                postId: postId
+            },
+        });
+        return comment;
     } catch (error) {
         console.error("Error liking the post:", error);
         return null;

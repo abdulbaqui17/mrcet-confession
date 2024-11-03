@@ -17,7 +17,7 @@ export default function CreatePost() {
     const handlePostSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if(title.trim().length<3){
+        if (title.trim().length < 3) {
             toast.error("Title must be 3 char long")
             return;
         }
@@ -43,7 +43,7 @@ export default function CreatePost() {
     if (!session) {
         return (
             <div className="my-2 w-full max-w-xl p-4 mx-auto m-6 border rounded-lg shadow-md bg-gray-800 text-white">
-                <p>You are not logged in. Please <a href="/api/auth/signin" className="text-blue-400">log in</a> or <a href="/api/auth/signin" className="text-blue-400">create an account</a> to post.</p>
+                <p>You are not logged in. Please <a href="/api/auth/signin" className="text-blue-400">log in</a> or <a href="/api/auth/signin" className="text-blue-400">create an account</a> to post and comment</p>
             </div>
         );
     }
@@ -55,7 +55,7 @@ export default function CreatePost() {
                     <h2 className="text-xl">Create a Post</h2>
                     <button
                         onClick={() => signOut()} // Logout functionality
-                        className="px-4 py-2 font-semibold bg-red-600 text-white rounded-full hover:bg-red-500"
+                        className="px-4 py-2 font-semibold text-white rounded-full hover:bg-red-500"
                     >
                         Logout
                     </button>
@@ -68,7 +68,7 @@ export default function CreatePost() {
                             <button
                                 type="button"
                                 onClick={() => open()}
-                                className="flex items-center px-4 py-2 mb-4 font-semibold bg-gray-900 text-white rounded-full hover:bg-gray-800"
+                                className="flex items-center px-4 py-2 mb-4 font-semibold bg-black text-white rounded-full hover:bg-gray-800"
                             >
                                 <FaUpload className="mr-2" /> {/* Icon added here */}
                                 Upload an image
@@ -90,7 +90,7 @@ export default function CreatePost() {
                     <div className="flex justify-end mt-2">
                         <button
                             type="submit"
-                            className="px-4 py-2 font-semibold bg-gray-900 text-white rounded-full focus:ring focus:ring-blue-300 disabled:opacity-50"
+                            className="px-4 py-2 font-semibold bg-black text-white rounded-full focus:ring focus:ring-blue-300 disabled:opacity-50"
                         >
                             Publish Post
                         </button>
