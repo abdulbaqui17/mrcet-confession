@@ -7,6 +7,9 @@ import { motion, useInView } from "framer-motion";
 import { Session } from "next-auth";
 import { format } from 'date-fns';
 import { useRef } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Heart, MessageSquare } from "lucide-react";
 
 interface AnimatedPostListProps {
     posts: Post[];
@@ -23,17 +26,17 @@ function AnimatedPostList({ posts, session }: AnimatedPostListProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="my-2 w-full max-w-xl p-4 mx-auto m-6 border rounded-lg shadow-md bg-black text-white"
+            className="w-full max-w-5xl mx-auto p-6"
         >
             <motion.h2 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="text-lg font-semibold mb-4"
+                className="text-3xl font-bold text-center mb-12"
             >
-                Your Feed
+                Recent Confessions
             </motion.h2>
-            <ul className="space-y-4">
+            <div className="grid grid-cols-1 gap-8">
                 {posts.map((post, index) => (
                     <PostItem 
                         key={post.id} 
@@ -42,12 +45,11 @@ function AnimatedPostList({ posts, session }: AnimatedPostListProps) {
                         index={index} 
                     />
                 ))}
-            </ul>
+            </div>
         </motion.div>
     );
 }
 
-// Separate component for individual posts
 function PostItem({ post, session, index }: { post: Post; session: Session | null; index: number }) {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -57,80 +59,83 @@ function PostItem({ post, session, index }: { post: Post; session: Session | nul
     };
 
     return (
-        <motion.li 
+        <motion.div 
             ref={ref}
             initial={{ opacity: 0, y: 50 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
             transition={{ 
                 duration: 0.5,
-                delay: 0.1
+                delay: index * 0.1
             }}
             whileHover={{ scale: 1.02 }}
-            className="p-4 border rounded-lg bg-gray-800"
         >
-            <div className="flex items-center gap-4">
-                <motion.div 
-                    whileHover={{ scale: 1.1 }}
-                    className="w-10 h-10 rounded-full flex justify-center font-bold text-2xl bg-black pt-1"
-                >
-                    {post.id}
-                </motion.div>
-                <div className="font-medium dark:text-white">
-                    <div className='text-2xl'>Anonymous post</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400"></div>
-                </div>
-            </div>
-            <div className='p-2 m-2'>
-                <motion.h3 
-                    initial={{ opacity: 0 }}
-                    animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="text-xl"
-                >
-                    {post.title}
-                </motion.h3>
-                {post.image && (
-                    <motion.img 
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
-                        transition={{ delay: 0.4 }}
-                        src={post.image} 
-                        alt={post.title} 
-                        className="mx-auto mt-2 rounded-lg" 
-                    />
-                )}
-                <motion.p 
-                    initial={{ opacity: 0 }}
-                    animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-                    transition={{ delay: 0.5 }}
-                    className="text-gray-400 mt-1"
-                >
-                    Posted on {formatDate(post.createdAt)}
-                </motion.p>
-            </div>
-            <motion.div 
-                initial={{ opacity: 0 }}
-                animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-                transition={{ delay: 0.6 }}
-                className="mt-4"
-            >
-                <LikeButton
-                    likesCount={post.likes.length}
-                    postId={post.id}
-                />
-                <div className="mt-2">
-                    <h4 className="text-gray-300 font-semibold">Comments:</h4>
-                    <ul className="space-y-2 mt-2">
-                        {session?.user && <CommentBox postId={post.id} />}
-                        {post.comments.map((comment: {text: string}, index: number) => (
-                            <div key={index} className="flex items-center space-x-2 text-sm text-gray-300">
-                                <p>{comment.text}</p>
+            <Card>
+                <CardHeader>
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                                <span className="text-primary font-semibold">A</span>
                             </div>
-                        ))}
-                    </ul>
-                </div>
-            </motion.div>
-        </motion.li>
+                            <div>
+                                <CardTitle>Anonymous Confession</CardTitle>
+                                <p className="text-sm text-muted-foreground">
+                                    Posted on {formatDate(post.createdAt)}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+                        transition={{ delay: 0.3 }}
+                    >
+                        <h3 className="text-xl font-semibold mb-4">{post.title}</h3>
+                        {post.image && (
+                            <motion.img 
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+                                transition={{ delay: 0.4 }}
+                                src={post.image} 
+                                alt={post.title} 
+                                className="w-full h-auto rounded-lg mb-4" 
+                            />
+                        )}
+                    </motion.div>
+
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+                        transition={{ delay: 0.6 }}
+                        className="mt-6 space-y-4"
+                    >
+                        <div className="flex items-center gap-4">
+                            <LikeButton
+                                likesCount={post.likes.length}
+                                postId={post.id}
+                            />
+                            <Button variant="ghost" size="sm" className="gap-2">
+                                <MessageSquare className="h-4 w-4" />
+                                {post.comments.length} Comments
+                            </Button>
+                        </div>
+
+                        <div className="mt-4 space-y-4">
+                            {session?.user && <CommentBox postId={post.id} />}
+                            {post.comments.map((comment: {text: string}, index: number) => (
+                                <div key={index} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
+                                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                                        <span className="text-primary text-sm">A</span>
+                                    </div>
+                                    <p className="text-sm text-muted-foreground">{comment.text}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+                </CardContent>
+            </Card>
+        </motion.div>
     );
 }
 

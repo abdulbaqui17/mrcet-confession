@@ -1,11 +1,5 @@
 import type { Config } from "tailwindcss";
 import { nextui } from "@nextui-org/react";
-import { ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
 
 const config: Config = {
   content: [
@@ -16,22 +10,46 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+      },
       animation: {
         "gradient-x": "gradient-x 15s ease infinite",
         "gradient-y": "gradient-y 15s ease infinite",
         "gradient-xy": "gradient-xy 15s ease infinite",
         float: "float 6s ease-in-out infinite",
-        spotlight: "spotlight 2s ease 0.75s 1 forwards",
-      },
-      colors: {
-        primary: {
-          DEFAULT: "#6366f1",
-          foreground: "#ffffff",
-        },
-        secondary: {
-          DEFAULT: "#f43f5e",
-          foreground: "#ffffff",
-        },
       },
       keyframes: {
         "gradient-y": {
@@ -68,21 +86,11 @@ const config: Config = {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-20px)" },
         },
-        spotlight: {
-          "0%": {
-            opacity: "0",
-            transform: "translate(-72%, -62%) scale(0.5)",
-          },
-          "100%": {
-            opacity: "1",
-            transform: "translate(-50%, -40%) scale(1)",
-          },
-        },
       },
     },
   },
   darkMode: "class",
-  plugins: [nextui(), require("daisyui")],
+  plugins: [nextui()],
 };
 
 export default config;
