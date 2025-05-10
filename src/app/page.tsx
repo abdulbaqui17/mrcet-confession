@@ -1,29 +1,19 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import Navbar from '@/components/landing/Navbar';
+import Hero from '@/components/landing/Hero';
+import Features from '@/components/landing/Features';
+import Testimonials from '@/components/landing/Testimonials';
+import Footer from '@/components/landing/Footer';
 
 export default function LandingPage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.prefetch('/posts'); // manually preload
-  }, [router]);
-
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center">
-      <div className="text-center max-w-2xl px-4">
-        <h1 className="text-5xl font-bold mb-6">MRCET Confession</h1>
-        <p className="text-xl mb-8">
-          A platform where students can share their thoughts, experiences, and stories anonymously.
-        </p>
-        <button
-          onClick={() => router.push('/posts')}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105"
-        >
-          Get Started
-        </button>
-      </div>
-    </div>
+    <main className="bg-black min-h-screen">
+      <Navbar />
+      <Hero />
+      <Features />
+      <Testimonials />
+      <Footer />
+    </main>
   );
 }
