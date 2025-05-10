@@ -1,8 +1,15 @@
-// app/page.tsx
+'use client';
 
-import Link from 'next/link';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function LandingPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.prefetch('/posts'); // manually preload
+  }, [router]);
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center">
       <div className="text-center max-w-2xl px-4">
@@ -10,12 +17,12 @@ export default function LandingPage() {
         <p className="text-xl mb-8">
           A platform where students can share their thoughts, experiences, and stories anonymously.
         </p>
-        <Link 
-          href="/posts" 
+        <button
+          onClick={() => router.push('/posts')}
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105"
         >
           Get Started
-        </Link>
+        </button>
       </div>
     </div>
   );

@@ -2,6 +2,9 @@ import prisma from "@/db";
 import GoogleProvider from "next-auth/providers/google";
 
 export const Next_Auth = {
+    pages: {
+        signIn: '/posts'
+    },
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID || "",

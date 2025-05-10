@@ -24,7 +24,7 @@ export default function CreatePost() {
 
         const res = await publisPost(title, mediaList);
         if (res) {
-            router.push("/");
+            router.push("/posts");
             toast.success("post published successfully")
         }
         setTitle(""); // Clear title after submission
