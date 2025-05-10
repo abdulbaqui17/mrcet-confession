@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
 import { publisPost } from '@/server/actions';
 import { CldUploadWidget } from 'next-cloudinary'; // Ensure you have this package installed
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaUpload } from 'react-icons/fa'; // Importing an upload icon from react-icons
-import { useSession, signOut } from "next-auth/react"; // Importing useSession and signOut
+import { useSession, signOut, signIn } from "next-auth/react"; // Importing useSession and signOut
 import toast from 'react-hot-toast';
 
 export default function CreatePost() {
@@ -25,7 +25,7 @@ export default function CreatePost() {
         const res = await publisPost(title, mediaList);
         if (res) {
             router.push("/posts");
-            toast.success("post published successfully")
+            toast.success("Post published successfully")
         }
         setTitle(""); // Clear title after submission
         setMediaList(""); // Clear media after submission
@@ -43,7 +43,15 @@ export default function CreatePost() {
     if (!session) {
         return (
             <div className="my-2 w-full max-w-xl p-4 mx-auto m-6 border rounded-lg shadow-md bg-gray-800 text-white">
-                <p>You are not logged in. Please <a href="/api/auth/signin" className="text-blue-400">log in</a> or <a href="/api/auth/signin" className="text-blue-400">create an account</a> to post and comment</p>
+                <p>You are not logged in. Please 
+                    <button 
+                        onClick={() => signIn('google', { callbackUrl: '/posts' })}
+                        className="text-blue-400"
+                    >
+                        log in
+                    </button> 
+                    to post and comment.
+                </p>
             </div>
         );
     }
@@ -54,7 +62,7 @@ export default function CreatePost() {
                 <div className="flex justify-between mb-4"> {/* Container for Logout button */}
                     <h2 className="text-xl">Create a Post</h2>
                     <button
-                        onClick={() => signOut()} // Logout functionality
+                        onClick={() => signOut({ callbackUrl: '/posts' })} // Logout functionality with redirect
                         className="px-4 py-2 font-semibold text-white rounded-full hover:bg-red-500"
                     >
                         Logout
