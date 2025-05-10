@@ -1,6 +1,6 @@
 'use client';
 
-import { Post } from "@/app/page";
+import { Post } from '@/types/post';
 import LikeButton from "./LikeButton";
 import CommentBox from "./commentBox";
 import { motion, useInView } from "framer-motion";
@@ -122,16 +122,10 @@ function PostItem({ post, session, index }: { post: Post; session: Session | nul
                     <h4 className="text-gray-300 font-semibold">Comments:</h4>
                     <ul className="space-y-2 mt-2">
                         {session?.user && <CommentBox postId={post.id} />}
-                        {post.comments.map((comment, index) => (
-                            <motion.li 
-                                key={index}
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
-                                transition={{ delay: 0.7 + (index * 0.1) }}
-                                className="text-gray-300"
-                            >
-                                👉 {comment.text}
-                            </motion.li>
+                        {post.comments.map((comment: {text: string}, index: number) => (
+                            <div key={index} className="flex items-center space-x-2 text-sm text-gray-300">
+                                <p>{comment.text}</p>
+                            </div>
                         ))}
                     </ul>
                 </div>

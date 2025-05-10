@@ -1,7 +1,7 @@
 // components/DisplayPosts.tsx
 
 export const dynamic = 'force-dynamic';
-import { Post } from "@/app/page";
+import { Post } from "@/types/post";
 import { getServerSession } from "next-auth";
 import AnimatedPostList from "./AnimatedPostList";
 
