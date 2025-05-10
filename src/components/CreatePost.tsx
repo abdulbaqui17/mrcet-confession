@@ -47,14 +47,14 @@ export default function CreatePost() {
 
     if (!session) {
         return (
-            <Card className="w-full max-w-xl mx-auto my-6">
+            <Card className="w-full max-w-4xl mx-auto p-3 mt-10 ">
                 <CardContent className="pt-6">
-                    <p className="text-center text-muted-foreground">
+                    <p className="text-center text-muted-foreground text-2xl">
                         You are not logged in. Please{' '}
                         <Button 
                             variant="link" 
                             onClick={() => signIn('google', { callbackUrl: '/posts' })}
-                            className="p-0 h-auto font-semibold"
+                            className="p-0 h-auto font-semibold text-2xl"
                         >
                             log in
                         </Button>{' '}
@@ -70,7 +70,7 @@ export default function CreatePost() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="w-full max-w-xl mx-auto my-6"
+            className="w-full max-w-5xl mx-auto p-6"
         >
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
