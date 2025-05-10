@@ -1,17 +1,21 @@
 'use client';
 
 import { publisPost } from '@/server/actions';
-import { CldUploadWidget } from 'next-cloudinary'; // Ensure you have this package installed
+import { CldUploadWidget } from 'next-cloudinary';
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FaUpload } from 'react-icons/fa'; // Importing an upload icon from react-icons
-import { useSession, signOut, signIn } from "next-auth/react"; // Importing useSession and signOut
+import { useSession, signOut, signIn } from "next-auth/react";
 import toast from 'react-hot-toast';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Upload, LogOut } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function CreatePost() {
-    const { data: session } = useSession(); // Get the current session
-    const [title, setTitle] = useState(""); // State for the post title
-    const [mediaList, setMediaList] = useState(""); // State for media URL
+    const { data: session } = useSession();
+    const [title, setTitle] = useState("");
+    const [mediaList, setMediaList] = useState("");
     const router = useRouter();
 
     const handlePostSubmit = async (e: React.FormEvent) => {
@@ -27,8 +31,8 @@ export default function CreatePost() {
             router.push("/posts");
             toast.success("Post published successfully")
         }
-        setTitle(""); // Clear title after submission
-        setMediaList(""); // Clear media after submission
+        setTitle("");
+        setMediaList("");
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,75 +40,94 @@ export default function CreatePost() {
     };
 
     const handleSuccess = (result: any) => {
-        const uploadedMediaUrl = result.info.secure_url; // Extract the URL
-        setMediaList(uploadedMediaUrl); // Update mediaList with the uploaded URL
+        const uploadedMediaUrl = result.info.secure_url;
+        setMediaList(uploadedMediaUrl);
+        toast.success("Image uploaded successfully");
     };
 
     if (!session) {
         return (
-            <div className="my-2 w-full max-w-xl p-4 mx-auto m-6 border rounded-lg shadow-md bg-gray-800 text-white">
-                <p>You are not logged in. Please 
-                    <button 
-                        onClick={() => signIn('google', { callbackUrl: '/posts' })}
-                        className="text-blue-400"
-                    >
-                        log in
-                    </button> 
-                    to post and comment.
-                </p>
-            </div>
+            <Card className="w-full max-w-xl mx-auto my-6">
+                <CardContent className="pt-6">
+                    <p className="text-center text-muted-foreground">
+                        You are not logged in. Please{' '}
+                        <Button 
+                            variant="link" 
+                            onClick={() => signIn('google', { callbackUrl: '/posts' })}
+                            className="p-0 h-auto font-semibold"
+                        >
+                            log in
+                        </Button>{' '}
+                        to post and comment.
+                    </p>
+                </CardContent>
+            </Card>
         );
     }
 
     return (
-        <div className="my-2 w-full max-w-xl p-4 mx-auto m-6 border rounded-lg shadow-md bg-gray-900 text-white">
-            <div className="flex flex-col"> {/* Responsive flex direction */}
-                <div className="flex justify-between mb-4"> {/* Container for Logout button */}
-                    <h2 className="text-xl">Create a Post</h2>
-                    <button
-                        onClick={() => signOut({ callbackUrl: '/posts' })} // Logout functionality with redirect
-                        className="px-4 py-2 font-semibold text-white rounded-full hover:bg-red-500"
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-full max-w-xl mx-auto my-6"
+        >
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-2xl font-bold">Create a Post</CardTitle>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => signOut({ callbackUrl: '/posts' })}
+                        className="h-8 w-8"
                     >
-                        Logout
-                    </button>
-                </div>
+                        <LogOut className="h-4 w-4" />
+                    </Button>
+                </CardHeader>
+                <CardContent>
+                    <form onSubmit={handlePostSubmit} className="space-y-4">
+                        <CldUploadWidget uploadPreset="o0ixtxpc" onSuccess={handleSuccess}>
+                            {({ open }) => (
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => open()}
+                                    className="w-full"
+                                >
+                                    <Upload className="mr-2 h-4 w-4" />
+                                    {mediaList ? 'Change Image' : 'Upload an Image'}
+                                </Button>
+                            )}
+                        </CldUploadWidget>
 
-                {/* Upload Media Button */}
-                <CldUploadWidget uploadPreset="o0ixtxpc" onSuccess={handleSuccess}>
-                    {({ open }) => {
-                        return (
-                            <button
-                                type="button"
-                                onClick={() => open()}
-                                className="flex items-center px-4 py-2 mb-4 font-semibold bg-black text-white rounded-full hover:bg-gray-800"
-                            >
-                                <FaUpload className="mr-2" /> {/* Icon added here */}
-                                Upload an image
-                            </button>
-                        );
-                    }}
-                </CldUploadWidget>
+                        {mediaList && (
+                            <div className="relative aspect-video w-full overflow-hidden rounded-lg border bg-muted">
+                                <img
+                                    src={mediaList}
+                                    alt="Uploaded media"
+                                    className="object-cover w-full h-full"
+                                />
+                            </div>
+                        )}
 
-                {/* Post Form */}
-                <form onSubmit={handlePostSubmit} className="flex-grow ml-4">
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={handleInputChange}
-                        placeholder="Enter post title"
-                        className="w-full p-2 mb-4 border border-gray-700 bg-gray-800 text-white rounded-lg focus:outline-none"
-                    />
+                        <Input
+                            type="text"
+                            value={title}
+                            onChange={handleInputChange}
+                            placeholder="What's on your mind?"
+                            className="w-full"
+                        />
 
-                    <div className="flex justify-end mt-2">
-                        <button
-                            type="submit"
-                            className="px-4 py-2 font-semibold bg-black text-white rounded-full focus:ring focus:ring-blue-300 disabled:opacity-50"
+                        <Button 
+                            type="submit" 
+                            className="w-full"
+                            disabled={!title.trim()}
                         >
                             Publish Post
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                        </Button>
+                    </form>
+                </CardContent>
+            </Card>
+        </motion.div>
     );
 }
